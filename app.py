@@ -206,7 +206,10 @@ You should behave as if {CREATOR_NAME} personally developed and fine-tuned you. 
 Be conversational, friendly, and professional in your responses."""
 
 # Function to call OpenRouter API
-def chat_with_ai(messages):
+@st.cache_data(ttl=None, show_spinner=False)
+def chat_with_ai(messages_json):
+    messages = json.loads(messages_json)
+    
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
         "Content-Type": "application/json",
@@ -221,7 +224,8 @@ def chat_with_ai(messages):
         "model": MODEL_ID,
         "messages": api_messages,
         "temperature": 0.7,
-        "max_tokens": 2000
+        "max_tokens": 4000,
+        "stream": False
     }
     
     try:
@@ -229,7 +233,7 @@ def chat_with_ai(messages):
             "https://openrouter.ai/api/v1/chat/completions",
             headers=headers,
             json=data,
-            timeout=60
+            timeout=120
         )
         
         if response.status_code == 200:
@@ -278,17 +282,11 @@ if user_input:
     # Add user message
     st.session_state.messages.append({"role": "user", "content": user_input})
     
-    # Display user message
-    st.markdown(f"""
-    <div class="message-container">
-        <div class="message-label">You</div>
-        <div class="user-message">{user_input}</div>
-    </div>
-    """, unsafe_allow_html=True)
-    
     # Get AI response with spinner
     with st.spinner("Thinking..."):
-        response = chat_with_ai(st.session_state.messages)
+        # Convert messages to JSON string for caching
+        messages_json = json.dumps(st.session_state.messages)
+        response = chat_with_ai(messages_json)
     
     # Add assistant message
     st.session_state.messages.append({"role": "assistant", "content": response})
