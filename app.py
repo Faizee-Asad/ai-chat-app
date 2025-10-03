@@ -16,6 +16,10 @@ st.markdown("""
 <style>
     /* Main background */
     .stApp {
+        background-color: #ffffff;
+    }
+    
+    .main {
         background-color: #f5f5f5;
     }
     
@@ -27,8 +31,15 @@ st.markdown("""
     /* Main container */
     .main .block-container {
         padding-top: 2rem;
-        padding-bottom: 2rem;
+        padding-bottom: 5rem;
         max-width: 48rem;
+    }
+    
+    /* Fix chat input at bottom */
+    .stChatFloatingInputContainer {
+        background-color: #f5f5f5;
+        padding: 1rem 0;
+        border-top: 1px solid #e5e5e5;
     }
     
     /* Title styling */
@@ -88,11 +99,21 @@ st.markdown("""
         background-color: white;
         border: 2px solid #e5e5e5;
         border-radius: 1.5rem;
-        padding: 0.5rem;
     }
     
     .stChatInput textarea {
         font-size: 0.95rem;
+        color: #2e2e2e !important;
+        background-color: white !important;
+    }
+    
+    .stChatInput textarea::placeholder {
+        color: #999 !important;
+    }
+    
+    .stChatInput input {
+        color: #2e2e2e !important;
+        background-color: white !important;
     }
     
     /* Spinner */
